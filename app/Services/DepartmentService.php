@@ -28,7 +28,6 @@ class DepartmentService
     public function updateDepartment($request, string $id)
     {
         $department = $this->find($id);
-
         return $department->update([
             'name' => $request->name
         ]);

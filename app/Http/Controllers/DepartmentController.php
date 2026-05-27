@@ -63,7 +63,6 @@ class DepartmentController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
-
         $this->departmentService
             ->updateDepartment($request, $id);
 

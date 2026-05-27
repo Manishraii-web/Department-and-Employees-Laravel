@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmployeeWelcomeMail;
 use App\Models\Department;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
+
     public function __construct(protected EmployeeService $employeeService){ }
 //------------------------------------------------------------------------------
     public function index(Request $request)
@@ -20,7 +22,6 @@ class EmployeeController extends Controller
    public function create()
 {
     $departments = Department::all();
-
     return view(
         'employees.create',
         compact('departments')
@@ -28,9 +29,12 @@ class EmployeeController extends Controller
 }
    //----------------------------------------------------------------------------
     public function store(Request $request) {
+        $employee =
         $this->employeeService->storeEmployee(
-      $request->all(),
-      $request->file('image'));
+      $request->all());
+    //   $request->file('image'));
+
+    SendEmployeeWelcomeMail::dispatch($employee);
 
     return redirect()
     ->route('employees.index')
@@ -49,9 +53,7 @@ public function show(string $id)
     public function edit(string $id)
 {
     $employee = $this->employeeService->find($id);
-
     $departments = Department::all();
-
     return view(
         'employees.edit',
         compact('employee', 'departments')
@@ -61,7 +63,6 @@ public function show(string $id)
     public function update(Request $request, string $id)
     {
         $this->employeeService->updateEmployee($request, $id);
-
         return redirect()
             ->route('employees.index')
             ->with('success', 'Employee updated successfully!');
@@ -71,7 +72,6 @@ public function show(string $id)
     public function destroy(string $id)
     {
         $this->employeeService->deleteEmployee($id);
-
         return redirect()
             ->route('employees.index')
             ->with('success', 'Employee deleted successfully!');

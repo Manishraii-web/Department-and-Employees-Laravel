@@ -19,7 +19,6 @@ class EmployeeService{
 //------------------------------------------------------------------------------
 public function storeEmployee($data){
     return $this->employee->create($data);
-
 }
 //------------------------------------------------------------------------------
 
@@ -33,9 +32,6 @@ public function storeEmployee($data){
     {
         $employee = $this->find($id);
         $data = $request->all();
-
-
-
      return $employee->update($data);
 }
     //-----------------------------------------------------------------------
